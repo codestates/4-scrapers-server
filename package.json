@@ -1,0 +1,29 @@
+{
+  "name": "4-scrapers-server",
+  "version": "1.0.0",
+  "description": "Project Start!",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/david419kr/4-scrapers-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/david419kr/4-scrapers-server/issues"
+  },
+  "homepage": "https://github.com/david419kr/4-scrapers-server#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.3.5"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.2.0"
+  }
+}
