@@ -18,6 +18,15 @@
   "homepage": "https://github.com/david419kr/4-scrapers-server#readme",
   "dependencies": {
     "cors": "^2.8.5",
+<<<<<<< HEAD
     "express": "^4.17.1"
+=======
+    "express": "^4.17.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.3.5"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.2.0"
+>>>>>>> feature/4-sequelizer
   }
 }
