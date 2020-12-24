@@ -1,19 +1,21 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const usersRouter = require('./routes/users');
+const newsSearchRouter = require('./routes/newsSearch');
+app.use(express.json());
 
 app.use(
     cors({
-      origin: 'http://4-scrapers.s3-website.ap-northeast-2.amazonaws.com',
-      methods: ['GET', 'POST'],
+      origin: '*',
+      methods: ['GET', 'POST', 'DELETE', 'PATCH', 'OPTIONS'],
       credentials: true
     })
 );
 
+app.use('/user', usersRouter);
+app.use('/search', newsSearchRouter);
 
-app.use('/', (req,res) => {
-    res.send('hello practice node server-deploy');
-})
 app.listen(5000, ()=> {
     console.log('server on 5000')
 })
