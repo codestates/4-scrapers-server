@@ -4,7 +4,7 @@ const cors = require('cors');
 
 app.use(
     cors({
-      origin: 'http://4-scrapers.s3-website.ap-northeast-2.amazonaws.com/',
+      origin: 'http://4-scrapers.s3-website.ap-northeast-2.amazonaws.com',
       methods: ['GET', 'POST'],
       credentials: true
     })
