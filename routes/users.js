@@ -9,5 +9,6 @@ router.get('', usersController.getUserProfile) //회원정보 가져오기
 router.post('', usersController.createUser) //회원가입
 router.post('/login', usersController.login) //로그인
 router.post('/logout', usersController.logout) //로그아웃
+router.post('/token', usersController.tokenRequest) //accessToekn 리퀘스트
 
 module.exports = router;

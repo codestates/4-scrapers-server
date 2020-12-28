@@ -1,3 +1,5 @@
+const accessTokenRequest = require('./tokenRequest');
+
 module.exports = {
     deleteUser: require('./deleteUser'),
     patchUser: require('./patchUser'),
@@ -5,5 +7,6 @@ module.exports = {
     getUserProfile: require('./getUserProfile'),
     createUser: require('./createUser'),
     login: require('./login'),
-    logout: require('./logout')
+    logout: require('./logout'),
+    tokenRequest: require('./tokenRequest')
   };
