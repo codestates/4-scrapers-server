@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
             expiresIn: "7 days"
         })
         await user.update({accessToken, refreshToken}, { where: { email: req.body.email } });
-        res.status(201)
+        res.status(200)
             .cookie('refreshToken', refreshToken, { httpOnly: true, sameSite: 'none' })
             .send({
                 data: {id: userInfo.dataValues.id, email: userInfo.dataValues.email},

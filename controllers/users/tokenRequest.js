@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
       const data = cleanJWT(jwt.verify(token, ACCESS_SECRET));
       const userInfo = await user.findOne({where: {email: data.email}})
       if (token === userInfo.dataValues.accessToken) {
-        res.status(201).send({
+        res.status(200).send({
           data,
           accessToken: token,
           message: 'access token verify ok'
@@ -61,7 +61,7 @@ module.exports = async (req, res) => {
                     expiresIn: '1 hours'
                 })
                 await user.update({accessToken}, {where: {email: data.email}})
-                res.status(201).send({
+                res.status(200).send({
                   data,
                   accessToken,
                   message: 'accessToken re-issued'
