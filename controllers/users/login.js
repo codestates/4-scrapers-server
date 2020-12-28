@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
     if (!userInfo) {
         res.status(400).send({
             data: null,
-            messae: "not authorized"
+            message: "not authorized"
         })
     } else {
         const accessToken = jwt.sign({
