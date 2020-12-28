@@ -18,23 +18,36 @@ module.exports = async (req, res) => {
     delete cleanToken.jti;
     return cleanToken;
   }
-  if (!req.headers.authorization) res.status(400).send({ data: null, message: 'invalid access token' });
+  if (!req.headers.authorization) res.status(400).send({ data: null, message: 'access token not found' });
   else {
     const authorization = req.headers.authorization;
     const token = authorization.split(' ')[1];
 
     try {
       const data = cleanJWT(jwt.verify(token, ACCESS_SECRET));
-      res.status(201).send({
-        data,
-        accessToken: token,
-        message: 'access token verify ok'
-      });
+      const userInfo = await user.findOne({where: {email: data.email}})
+      if (token === userInfo.dataValues.accessToken) {
+        res.status(201).send({
+          data,
+          accessToken: token,
+          message: 'access token verify ok'
+        });
+      } else {
+        res.status(400).send({
+          data: null,
+          message: 'invalid access token'
+        })
+      }
     } catch (err) {
       if (err.name === 'TokenExpiredError') {
           const data = cleanJWT(jwt.decode(token, ACCESS_SECRET));
           const userInfo = await user.findOne({where: {email: data.email}})
-          if (!req.cookies.refreshToken) {
+          if (token !== userInfo.dataValues.accessToken) {
+            res.status(400).send({
+              data: null,
+              message: 'invalid access token'
+            });
+          } else if (!req.cookies.refreshToken) {
               res.status(400).send({data: null, message: 'refresh token not provided'});
           } else if (req.cookies.refreshToken !== userInfo.dataValues.refreshToken) {
               res.status(400).send({data: null, message: "invalid refresh token"})
@@ -47,6 +60,7 @@ module.exports = async (req, res) => {
                 }, ACCESS_SECRET, {
                     expiresIn: '1 hours'
                 })
+                await user.update({accessToken}, {where: {email: data.email}})
                 res.status(201).send({
                   data,
                   accessToken,
@@ -54,7 +68,9 @@ module.exports = async (req, res) => {
                 })
               } catch (err) {
                 await user.update({refreshToken: null}, {where: {email: data.email}})
-                res.status(400).send({data:null, message: "refresh token expired. please login again"})
+                res.status(400)
+                .cookie('refreshToken', null, { httpOnly: true, sameSite: 'none' })
+                .send({data:null, message: "refresh token expired. please login again"})
               }
           }
       }

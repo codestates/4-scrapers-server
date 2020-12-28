@@ -18,15 +18,15 @@ module.exports = async (req, res) => {
             id: userInfo.dataValues.id,
             email: userInfo.dataValues.email
         }, ACCESS_SECRET, {
-            expiresIn: "1 seconds"
+            expiresIn: "3600 seconds"
         })
         const refreshToken = jwt.sign({
             id: userInfo.dataValues.id,
             email: userInfo.dataValues.email
         }, REFRESH_SECRET, {
-            expiresIn: "1 seconds"
+            expiresIn: "7 days"
         })
-        await user.update({refreshToken}, { where: { email: req.body.email } });
+        await user.update({accessToken, refreshToken}, { where: { email: req.body.email } });
         res.status(201)
             .cookie('refreshToken', refreshToken, { httpOnly: true, sameSite: 'none' })
             .send({
