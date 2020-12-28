@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
         try {
             jwt.verify(token, ACCESS_SECRET);
             await user.update({accessToken: null, refreshToken: null}, { where: { email: req.body.email } });
-            res.status(201)
+            res.status(200)
             .cookie('refreshToken', null, { httpOnly: true, sameSite: 'none' })
             .send({data: null, message: 'logout success'})
         } catch (err) {
