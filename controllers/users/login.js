@@ -18,13 +18,13 @@ module.exports = async (req, res) => {
             id: userInfo.dataValues.id,
             email: userInfo.dataValues.email
         }, ACCESS_SECRET, {
-            expiresIn: "1 seconds"
+            expiresIn: "1 hour"
         })
         const refreshToken = jwt.sign({
             id: userInfo.dataValues.id,
             email: userInfo.dataValues.email
         }, REFRESH_SECRET, {
-            expiresIn: "1 seconds"
+            expiresIn: "1 hour"
         })
         await user.update({refreshToken}, { where: { email: req.body.email } });
         res.status(201)
