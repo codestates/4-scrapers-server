@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
                 imageURL: news.image ? news.image.contentUrl : 'no image',
                 description: news.description,
                 datePublished: news.datePublished,
-                provider: news.provider.name
+                provider: news.provider[0].name
             })
         }
         res.send({ data: refinedSearchResult, message: 'search ok' });
