@@ -1,6 +1,7 @@
 const { user } = require('../../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const ACCESS_SECRET = process.env.ACCESS_SECRET;
 
 module.exports = async (req, res) => {
 
