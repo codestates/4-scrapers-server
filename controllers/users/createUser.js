@@ -14,6 +14,7 @@ module.exports = async (req, res) => {
 
         await user.create({
             email: req.body.email,
+            name: req.body.name,
             password: hash
         });
         res.status(200).send({data: null, message: 'complete User'})
