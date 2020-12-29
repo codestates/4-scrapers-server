@@ -4,22 +4,23 @@ const saltRounds = 10; // * 암호화된 문구길이
 
 module.exports = async (req, res) => {
     try {
-        const userInfo = await user.findOne({ where: {email: req.body.email}})
+        const userInfo = await user.findOne({ where: { email: req.body.email } })
 
-        if(userInfo) {
-            res.status(400).send({data: null, message: 'exist Email'})
+        if (userInfo) {
+            res.status(400).send({ data: null, message: 'exist Email' })
         }
+        else {
+            const hash = await bcrypt.hash(req.body.password, saltRounds);
 
-        const hash = await bcrypt.hash(req.body.password, saltRounds);
-
-        await user.create({
-            email: req.body.email,
-            name: req.body.name,
-            password: hash
-        });
-        res.status(200).send({data: null, message: 'complete User'})
+            await user.create({
+                email: req.body.email,
+                name: req.body.name,
+                password: hash
+            });
+            res.status(200).send({ data: null, message: 'complete User' })
+        }
     }
-    catch(err) {
+    catch (err) {
         console.log(err)
     }
 }
