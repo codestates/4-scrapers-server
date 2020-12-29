@@ -1,12 +1,23 @@
 const { user } = require('../../models');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const ACCESS_SECRET = process.env.ACCESS_SECRET;
 const REFRESH_SECRET = process.env.REFRESH_SECRET;
 
 module.exports = async (req, res) => {
-    let userInfo = await user.findOne({
-        where: { email: req.body.email, password: req.body.password }
-    })
+    let password;
+    try {
+        password = await bcrypt.compare(req.body.password, (await user.findOne({ where: { email: req.body.email } })).dataValues.password)
+    } catch {
+        password = null;
+    }
+    
+    let userInfo = null;
+    if (password) {
+        userInfo = await user.findOne({
+            where: { email: req.body.email }
+        })
+    }
 
     if (!userInfo) {
         res.status(400).send({
@@ -18,7 +29,7 @@ module.exports = async (req, res) => {
             id: userInfo.dataValues.id,
             email: userInfo.dataValues.email
         }, ACCESS_SECRET, {
-            expiresIn: "3600 seconds"
+            expiresIn: 3600
         })
         const refreshToken = jwt.sign({
             id: userInfo.dataValues.id,
@@ -30,7 +41,7 @@ module.exports = async (req, res) => {
         res.status(200)
             .cookie('refreshToken', refreshToken, { httpOnly: true, sameSite: 'none' })
             .send({
-                data: {id: userInfo.dataValues.id, email: userInfo.dataValues.email},
+                data: { id: userInfo.dataValues.id, email: userInfo.dataValues.email },
                 accessToken,
                 message: 'login ok'
             })
