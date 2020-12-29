@@ -1,4 +1,5 @@
 const { user } = require('../../models');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 module.exports = async (req, res) => {
