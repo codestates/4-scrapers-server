@@ -2,7 +2,7 @@ const axios = require('axios');
 const BING_API_KEY = process.env.BING_API_KEY;
 
 module.exports = async (req, res) => {
-    const [q, offset] = [req.body.q, req.body.scrolls * 10];
+    const [q, offset] = [req.body.q, req.body.scrolls * 20];
     const searchURL = `https://api.bing.microsoft.com/v7.0/news/search?cc=ko-KR&count=20&safeSearch=moderate&originalImg=true&offset=${offset}&q=${encodeURI(q)}`;
 
     try {
