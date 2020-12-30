@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
             }
             
             if (password) {
-                await user.destroy({ where: { email: req.body.email } });
+                await user.destroy({ where: { email: data.email } });
                 res.status(200).send({ data: null, message: 'deleteUser complete' })
             }
             else {
