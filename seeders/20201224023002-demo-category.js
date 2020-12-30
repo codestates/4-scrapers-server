@@ -39,6 +39,10 @@ module.exports = {
         id: '9',
         category: '기타'
       },
+      {
+        id: '10',
+        category: ''
+      },
     ]);
   },
 
