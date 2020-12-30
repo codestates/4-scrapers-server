@@ -19,6 +19,7 @@ module.exports = async (req, res) => {
             
             if (name && password) {
                 const hash = await bcrypt.hash(req.body.password, saltRounds);
+
                 await user.update({ name, password: hash }, { where: { email: verifyToken.email } })
                 res.status(200).send({ data: null, message: 'nickName And password Update.' })
             }
@@ -28,6 +29,7 @@ module.exports = async (req, res) => {
             }
             else if (password) {
                 const hash = await bcrypt.hash(req.body.password, saltRounds);
+
                 await user.update({ password: hash }, { where: { email: verifyToken.email } })
                 res.status(200).send({ data: null, message: 'password Update.' })
             }
