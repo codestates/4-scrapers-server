@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
             } catch (err) {
                 console.error(err)
             }
-            await user.update({profileIconURL: url + '/icon/' + req.file.filename }, { where: { email: data.email } });
+            await user.update({profileIconURL: url + '/user/icon/' + req.file.filename }, { where: { email: data.email } });
             res.status(200)
             .send({data: req.file, message: 'profile icon updated'})
         } catch (err) {
