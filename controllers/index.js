@@ -1,4 +1,5 @@
 module.exports = {
     newsSearchController: require('./newsSearch'),
-    usersController: require('./users')
+    usersController: require('./users'),
+    socialLoginController: require('./socialLogin')
   };

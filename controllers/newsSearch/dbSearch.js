@@ -2,8 +2,10 @@ const { scrap } = require('../../models');
 const jwt = require('jsonwebtoken');
 const ACCESS_SECRET = process.env.ACCESS_SECRET;
 const Sequelize = require('sequelize');
+const axios = require('axios');
 const Op = Sequelize.Op;
 const { news } = require('../../models');
+const { user } = require('../../models');
 const { category } = require('../../models');
 
 module.exports = async (req, res) => {
@@ -11,16 +13,30 @@ module.exports = async (req, res) => {
     else {
         const authorization = req.headers.authorization;
         const token = authorization.split(' ')[1];
+        let isGoogle = false;
+        if (token[4] === '.') isGoogle = true;
 
         try {
             const { q, pages } = req.body;
-            const offset = 20 * (pages-1);
-            const userdata = jwt.verify(token, ACCESS_SECRET);
-            
-            const scraps = await scrap.findAll({offset, limit:20, where: {userId: userdata.id}, 
-                include: [{model: news, category, where: {title: {
-                    [Op.like]: '%' + q + '%'
-                }}}, {model: category}] });
+            const offset = 20 * (pages - 1);
+            let userdata;
+            if (isGoogle) {
+                userdata = (await axios.post("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + token, null)).data;
+                userdata.id = (await user.findOne({where: {email: userdata.email}})).dataValues.id;
+            } else {
+                userdata = cleanJWT(jwt.verify(token, ACCESS_SECRET));
+            }
+
+            const scraps = await scrap.findAll({
+                offset, limit: 20, where: { userId: userdata.id },
+                include: [{
+                    model: news, category, where: {
+                        title: {
+                            [Op.like]: '%' + q + '%'
+                        }
+                    }
+                }, { model: category }]
+            });
 
             const refinedScraps = [];
             for (let scrap of scraps) {
@@ -36,10 +52,10 @@ module.exports = async (req, res) => {
                 })
             }
 
-            res.send({data: refinedScraps, message: "scrap search success"});
-            
+            res.send({ data: refinedScraps, message: "scrap search success" });
+
         } catch (err) {
-            res.status(400).send({data: err, message: 'invalid access token'});
+            res.status(400).send({ data: err, message: 'invalid access token' });
         }
 
     }
