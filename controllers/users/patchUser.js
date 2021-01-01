@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
             if (isGoogle) {
                 verifyToken = (await axios.post("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + token, null)).data;
             } else {
-                verifyToken = cleanJWT(jwt.verify(token, ACCESS_SECRET));
+                verifyToken = (jwt.verify(token, ACCESS_SECRET));
             }
 
             if (name && password) {

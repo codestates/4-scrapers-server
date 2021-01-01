@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
             if (isGoogle) {
                 data = (await axios.post("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + token, null)).data;
             } else {
-                data = cleanJWT(jwt.verify(token, ACCESS_SECRET));
+                data = (jwt.verify(token, ACCESS_SECRET));
             }
             const userInfo = await user.findOne({ where: { email: data.email } });
             let oldIcon;

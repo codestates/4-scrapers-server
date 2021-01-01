@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
                 userdata = (await axios.post("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + token, null)).data;
                 userdata.id = (await user.findOne({where: {email: userdata.email}})).dataValues.id;
             } else {
-                userdata = cleanJWT(jwt.verify(token, ACCESS_SECRET));
+                userdata = (jwt.verify(token, ACCESS_SECRET));
             }
             const newsdata = (await news.findOrCreate({where: {title, url, imageURL, description, datePublished, provider},
                 defaults: {title, url, imageURL, description, datePublished, provider}}))[0].dataValues;
