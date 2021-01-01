@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
                 data = (await axios.post("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + token, null)).data;
                 await axios.post("https://oauth2.googleapis.com/revoke?token=" + token, null);
             } else {
-                data = cleanJWT(jwt.verify(token, ACCESS_SECRET));
+                data = (jwt.verify(token, ACCESS_SECRET));
             }
             await user.update({ accessToken: null, refreshToken: null }, { where: { email: data.email } });
             res.status(200)
