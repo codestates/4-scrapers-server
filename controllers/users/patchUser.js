@@ -1,5 +1,6 @@
 const { user } = require('../../models');
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
 const ACCESS_SECRET = process.env.ACCESS_SECRET;
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -13,10 +14,17 @@ module.exports = async (req, res) => {
     }
     else {
         const token = req.headers.authorization.split(' ')[1];
-        
+        let isGoogle = false;
+        if (token[4] === '.') isGoogle = true;
+
         try {
-            const verifyToken = jwt.verify(token, ACCESS_SECRET);
-            
+            let verifyToken;
+            if (isGoogle) {
+                verifyToken = (await axios.post("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + token, null)).data;
+            } else {
+                verifyToken = (jwt.verify(token, ACCESS_SECRET));
+            }
+
             if (name && password) {
                 const hash = await bcrypt.hash(req.body.password, saltRounds);
 
