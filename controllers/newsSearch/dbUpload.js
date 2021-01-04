@@ -12,11 +12,11 @@ module.exports = async (req, res) => {
         const token = authorization.split(' ')[1];
 
         try {
-            const {title, url, imageURL, description, datePublished, provider, category} = req.body;
+            const {title, url, imageURL, description, datePublished, provider, categoryId} = req.body;
             const userdata = jwt.verify(token, ACCESS_SECRET);
             const newsdata = (await news.findOrCreate({where: {title, url, imageURL, description, datePublished, provider},
                 defaults: {title, url, imageURL, description, datePublished, provider}}))[0].dataValues;
-            const categorydata = (await categories.findOne({where: {category}})).dataValues;
+            const categorydata = (await categories.findOne({where: {id: categoryId}})).dataValues;
             const scrapdata = (await scrap.findOrCreate({where: {userId: userdata.id, newsId: newsdata.id, categoryId: categorydata.id},
             defaults: {userId: userdata.id, newsId: newsdata.id, categoryId: categorydata.id}}))[0].dataValues;
             

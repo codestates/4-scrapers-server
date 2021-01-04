@@ -10,9 +10,9 @@ module.exports = async (req, res) => {
         const token = authorization.split(' ')[1];
 
         try {
-            const { id, category } = req.body;
+            const { id, categoryId } = req.body;
             jwt.verify(token, ACCESS_SECRET);
-            const categorydata = (await categories.findOne({where: {category}})).dataValues;
+            const categorydata = (await categories.findOne({where: {id: categoryId}})).dataValues;
             await scrap.update({categoryId: categorydata.id}, {where: {id}})
 
             res.send({data: null, message: "category edited"});
