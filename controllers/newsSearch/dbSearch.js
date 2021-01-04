@@ -48,7 +48,7 @@ module.exports = async (req, res) => {
                     description: scrap.news.description,
                     datePublished: scrap.news.datePublished,
                     provider: scrap.news.provider,
-                    category: scrap.category.category
+                    category: scrap.category.id
                 })
             }
 
