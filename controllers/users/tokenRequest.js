@@ -35,18 +35,18 @@ module.exports = async (req, res) => {
       }
 
       const userInfo = await user.findOne({ where: { email: data.email } })
-      if (token === userInfo.dataValues.accessToken) {
+      //if (token === userInfo.dataValues.accessToken) {
         res.status(200).send({
           data,
           accessToken: token,
           message: 'access token verify ok'
         });
-      } else {
-        res.status(400).send({
-          data: null,
-          message: 'invalid access token'
-        })
-      }
+      // } else {
+      //   res.status(400).send({
+      //     data: null,
+      //     message: 'invalid access token'
+      //   })
+      // }
     } catch (err) {
       if (isGoogle) {
         if (!req.cookies.refreshToken) {

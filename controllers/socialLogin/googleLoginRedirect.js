@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
             }))
         }
 
-        res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true, sameSite: 'none' })
+        res.cookie('refreshToken', tokens.refresh_token, { httpOnly: true, sameSite: 'none' })
             .send({
                 data: {
                     id: userInfo.dataValues.id,
